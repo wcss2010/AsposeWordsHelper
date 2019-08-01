@@ -1,7 +1,9 @@
-﻿using Aspose.Words.Replacing;
+﻿using Aspose.Words.Drawing;
+using Aspose.Words.Replacing;
 using Aspose.Words.Tables;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Text;
 
@@ -215,7 +217,7 @@ namespace Aspose.Words
         /// <param name="startCell">开始单元格</param>
         /// <param name="endCell">结束单元格</param>
         /// <param name="table">表格</param>
-        public static void mergeCells(Cell startCell, Cell endCell, Table table)
+        public void mergeCells(Cell startCell, Cell endCell, Table table)
         {
             Point startCellPos = new Point(startCell.ParentRow.IndexOf(startCell), table.IndexOf(startCell.ParentRow));
             Point endCellPos = new Point(endCell.ParentRow.IndexOf(endCell), table.IndexOf(endCell.ParentRow));
@@ -249,6 +251,126 @@ namespace Aspose.Words
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 添加DataTable数据到Table对象（必须是已经有表头的表格）
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="table"></param>
+        public void fillDataToTable(Table table, DataTable dataTable)
+        {
+            //获得列数
+            int cellCount = table.Rows[table.Rows.Count - 1].Cells.Count;
+            //填充数据
+            foreach (DataRow dr in dataTable.Rows)
+            {
+                //创建新行
+                Aspose.Words.Tables.Row rowObj = new Row(table.Document);
+                for (int k = 0; k < dataTable.Columns.Count; k++)
+                {
+                    if (k >= cellCount)
+                    {
+                        continue;
+                    }
+
+                    //创建列
+                    Aspose.Words.Tables.Cell cellObj = new Cell(table.Document);
+                    Aspose.Words.Paragraph p = new Paragraph(table.Document);
+                    p.AppendChild(new Run(table.Document, dr[k] != null ? dr[k].ToString() : string.Empty));
+                    cellObj.AppendChild(p);
+                    rowObj.Cells.Add(cellObj);
+                }
+
+                //保存列
+                if (rowObj.Cells.Count >= 1)
+                {
+                    table.Rows.Add(rowObj);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 引入表格从一个另外的Word文档
+        /// </summary>
+        /// <param name="insertAfterNode"></param>
+        /// <param name="table"></param>
+        public void importTableAfterNode(Node insertAfterNode, Table table)
+        {
+            Document tableDoc = new Document();
+            tableDoc.FirstSection.Body.AppendChild(new NodeImporter(table.Document, tableDoc, ImportFormatMode.KeepSourceFormatting).ImportNode(table, true));
+            insertDocumentAfterNode(insertAfterNode, tableDoc);
+        }
+        
+        /// <summary>
+        /// 插入水印文本
+        /// </summary>
+        /// <param name="fontName">字体名称</param>
+        /// <param name="fontSize">字号</param>
+        /// <param name="width">文字矩阵宽度</param>
+        /// <param name="height">文字矩阵高度</param>
+        /// <param name="rotation">文字矩阵偏转角度</param>
+        /// <param name="fillColor">文字矩阵填充颜色</param>
+        /// <param name="watermarkText">水印文本</param>
+        public void insertWatermarkText(string fontName, double fontSize, int width, int height, int rotation, Color fillColor, string watermarkText)
+        {
+            // Create a watermark shape. This will be a WordArt shape. 
+            // You are free to try other shape types as watermarks.
+            Shape watermark = new Shape(WordDoc, ShapeType.TextPlainText);
+
+            // Set up the text of the watermark.
+            watermark.TextPath.Text = watermarkText;
+            watermark.TextPath.FontFamily = fontName;
+            watermark.TextPath.Size = fontSize;
+            watermark.Width = width;
+            watermark.Height = height;
+            // Text will be directed from the bottom-left to the top-right corner.
+            watermark.Rotation = rotation;
+            // Remove the following two lines if you need a solid black text.
+            watermark.Fill.Color = fillColor; // Try LightGray to get more Word-style watermark
+            watermark.StrokeColor = fillColor; // Try LightGray to get more Word-style watermark
+
+            // Place the watermark in the page center.
+            watermark.RelativeHorizontalPosition = RelativeHorizontalPosition.Page;
+            watermark.RelativeVerticalPosition = RelativeVerticalPosition.Page;
+            watermark.WrapType = WrapType.None;
+            watermark.VerticalAlignment = VerticalAlignment.Center;
+            watermark.HorizontalAlignment = HorizontalAlignment.Center;
+
+            // Create a new paragraph and append the watermark to this paragraph.
+            Paragraph watermarkPara = new Paragraph(WordDoc);
+            watermarkPara.AppendChild(watermark);
+
+            // Insert the watermark into all headers of each document section.
+            foreach (Section sect in WordDoc.Sections)
+            {
+                // There could be up to three different headers in each section, since we want
+                // the watermark to appear on all pages, insert into all headers.
+                insertWatermarkIntoHeader(watermarkPara, sect, HeaderFooterType.HeaderPrimary);
+                insertWatermarkIntoHeader(watermarkPara, sect, HeaderFooterType.HeaderFirst);
+                insertWatermarkIntoHeader(watermarkPara, sect, HeaderFooterType.HeaderEven);
+            }
+        }
+
+        /// <summary>
+        /// 在页头插入水印文本
+        /// </summary>
+        /// <param name="watermarkPara"></param>
+        /// <param name="sect"></param>
+        /// <param name="headerType"></param>
+        public void insertWatermarkIntoHeader(Paragraph watermarkPara, Section sect, HeaderFooterType headerType)
+        {
+            HeaderFooter header = sect.HeadersFooters[headerType];
+
+            if (header == null)
+            {
+                // There is no header of the specified type in the current section, create it.
+                header = new HeaderFooter(sect.Document, headerType);
+                sect.HeadersFooters.Add(header);
+            }
+
+            // Insert a clone of the watermark into the header.
+            header.AppendChild(watermarkPara.Clone(true));
         }
     }
 
