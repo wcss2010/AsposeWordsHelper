@@ -69,21 +69,21 @@ namespace WordTest
             doc.replaceAllWithBookmark(dic);
 
             //插入文档
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "项目摘要");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "基本概念及内涵");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "军事需求分析");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究现状");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究目标");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "基础性问题");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "课题之间的关系");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究成果及考核指标");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "评估方案");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "预期效益");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "项目负责人C");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究团队");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究基础与保障条件");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "组织实施与风险控制");
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "与有关计划关系");
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "项目摘要", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "基本概念及内涵", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "军事需求分析", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究现状", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究目标", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "基础性问题", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "课题之间的关系", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究成果及考核指标", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "评估方案", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "预期效益", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "项目负责人C", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究团队", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究基础与保障条件", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "组织实施与风险控制", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "与有关计划关系", true);
 
             //输出项目分解的节点
             doc.WordDocBuilder.MoveToBookmark("项目分解详细");
@@ -148,9 +148,8 @@ namespace WordTest
             //填充课题详细内容
             for (int k = 1; k <= 10; k++)
             {
-                doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "rrr.docx")), "autoBookmark_" + k);
+                doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "rrr.docx")), "autoBookmark_" + k, k == 10 ? true : false);
             }
-
             ////插入一个新页（横向）
             //doc.WordDocBuilder.MoveToBookmark("附件3");
             //doc.WordDocBuilder.InsertBreak(BreakType.SectionBreakNewPage);

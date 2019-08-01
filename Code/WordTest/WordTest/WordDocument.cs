@@ -97,8 +97,9 @@ namespace Aspose.Words
         /// </summary>
         /// <param name="tobeInserted"></param>
         /// <param name="bookmark"></param>
+        /// <param name="isNeedDeleteEnter"></param>
         /// <returns></returns>
-        public Document insertDocumentAfterBookMark(Document tobeInserted, string bookmark)
+        public Document insertDocumentAfterBookMark(Document tobeInserted, string bookmark,bool isNeedDeleteEnter)
         {
             // check to be inserted doc
             if (tobeInserted == null)
@@ -122,6 +123,15 @@ namespace Aspose.Words
                 // if bookmark is not provided, add the document at the end
                 appendDoc(tobeInserted);
             }
+
+            if (isNeedDeleteEnter)
+            {
+                if (WordDocBuilder.CurrentParagraph != null)
+                {
+                    WordDocBuilder.CurrentParagraph.Remove();
+                }
+            }
+
             return WordDoc;
         }
 
