@@ -113,7 +113,6 @@ namespace Aspose.Words
                 if (bm != null)
                 {
                     documentBuilder.MoveToBookmark(bookmark);
-                    documentBuilder.Writeln();
                     Node insertAfterNode = documentBuilder.CurrentParagraph.PreviousSibling;
                     insertDocumentAfterNode(insertAfterNode, tobeInserted);
                 }
