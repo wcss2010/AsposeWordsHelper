@@ -1,6 +1,8 @@
 ﻿using Aspose.Words.Replacing;
+using Aspose.Words.Tables;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Aspose.Words
@@ -44,7 +46,7 @@ namespace Aspose.Words
         /// <param name="dict">要插入内容的字典（Key=书签,Value=内容）</param>
         public void insertAllWithBookmark(Dictionary<string, object> dict)
         {
-            foreach (KeyValuePair<string,object> kvp in dict)   //循环键值对
+            foreach (KeyValuePair<string, object> kvp in dict)   //循环键值对
             {
                 //移动书签到指定位置
                 DocBuilder.MoveToBookmark(kvp.Key);  //将光标移入书签的位置
@@ -101,7 +103,7 @@ namespace Aspose.Words
             {
                 return WordDoc;
             }
-                        
+
             // check bookmark and then process
             if (bookmark != null && bookmark.Trim().Length > 0)
             {
@@ -159,7 +161,7 @@ namespace Aspose.Words
                 }
             }
         }
-        
+
         /// <summary>
         /// 添加到文档
         /// </summary>
@@ -205,6 +207,48 @@ namespace Aspose.Words
         public void appendDoc(Document srcDoc)
         {
             appendDoc(srcDoc, true);
+        }
+
+        /// <summary>
+        /// 合并单元格
+        /// </summary>
+        /// <param name="startCell">开始单元格</param>
+        /// <param name="endCell">结束单元格</param>
+        /// <param name="table">表格</param>
+        public static void mergeCells(Cell startCell, Cell endCell, Table table)
+        {
+            Point startCellPos = new Point(startCell.ParentRow.IndexOf(startCell), table.IndexOf(startCell.ParentRow));
+            Point endCellPos = new Point(endCell.ParentRow.IndexOf(endCell), table.IndexOf(endCell.ParentRow));
+            Rectangle mergeRange = new Rectangle(System.Math.Min(startCellPos.X,
+                    endCellPos.X), System.Math.Min(startCellPos.Y, endCellPos.Y),
+                    System.Math.Abs(endCellPos.X - startCellPos.X) + 1,
+                    System.Math.Abs(endCellPos.Y - startCellPos.Y) + 1);
+            foreach (Row row in table.Rows)
+            {
+                foreach (Cell cell in row.Cells)
+                {
+                    Point currentPos = new Point(row.IndexOf(cell), table.IndexOf(row));
+                    if (mergeRange.Contains(currentPos))
+                    {
+                        if (currentPos.X == mergeRange.X)
+                        {
+                            cell.CellFormat.HorizontalMerge = (CellMerge.First);
+                        }
+                        else
+                        {
+                            cell.CellFormat.HorizontalMerge = (CellMerge.Previous);
+                        }
+                        if (currentPos.Y == mergeRange.Y)
+                        {
+                            cell.CellFormat.VerticalMerge = (CellMerge.First);
+                        }
+                        else
+                        {
+                            cell.CellFormat.VerticalMerge = (CellMerge.Previous);
+                        }
+                    }
+                }
+            }
         }
     }
 
