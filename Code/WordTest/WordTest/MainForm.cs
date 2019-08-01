@@ -1,4 +1,5 @@
 ﻿using Aspose.Words;
+using Aspose.Words.Tables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +76,7 @@ namespace WordTest
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究现状", true);
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究目标", true);
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "基础性问题", true);
-            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "课题之间的关系", true);
+            doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "rrr.docx")), "课题之间的关系", true);
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "研究成果及考核指标", true);
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "评估方案", true);
             doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "ttt.docx")), "预期效益", true);
@@ -150,11 +151,45 @@ namespace WordTest
             {
                 doc.insertDocumentAfterBookMark(new Document(Path.Combine(desktopDir, "rrr.docx")), "autoBookmark_" + k, k == 10 ? true : false);
             }
+
             ////插入一个新页（横向）
             //doc.WordDocBuilder.MoveToBookmark("附件3");
             //doc.WordDocBuilder.InsertBreak(BreakType.SectionBreakNewPage);
             //doc.WordDocBuilder.PageSetup.Orientation = Aspose.Words.Orientation.Landscape;
 
+            //编辑表格数据
+            NodeCollection nodesss = doc.WordDoc.GetChildNodes(NodeType.Table, true);
+            foreach (Node nn in nodesss)
+            {
+                if (nn is Table)
+                {
+                    Table t = (Table)nn;
+
+                    if (t.Range.Text.Contains("进度要求"))
+                    {
+                        DataTable dtt = new DataTable();
+                        dtt.Columns.Add("A", typeof(string));
+                        dtt.Columns.Add("B", typeof(string));
+                        dtt.Columns.Add("C", typeof(string));
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+                        dtt.Rows.Add(new object[] { "111", "222", "333" });
+
+                        doc.fillDataToTable(t, dtt);
+
+                        t.Rows.RemoveAt(1);
+                    }
+                }                
+            }
+
+            //写保密资质
+            doc.WordDocBuilder.MoveToBookmark("附件2");
+            doc.WordDocBuilder.InsertImage(Image.FromFile("c:\\t.png"));
 
             //统一编号
             doc.WordDoc.FirstSection.PageSetup.SectionStart = SectionStart.EvenPage;
