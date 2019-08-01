@@ -27,7 +27,7 @@ namespace Aspose.Words
         /// <summary>
         /// Word文档操作
         /// </summary>
-        public DocumentBuilder DocBuilder
+        public DocumentBuilder WordDocBuilder
         {
             get { return documentBuilder; }
         }
@@ -51,7 +51,7 @@ namespace Aspose.Words
             foreach (KeyValuePair<string, object> kvp in dict)   //循环键值对
             {
                 //移动书签到指定位置
-                DocBuilder.MoveToBookmark(kvp.Key);  //将光标移入书签的位置
+                WordDocBuilder.MoveToBookmark(kvp.Key);  //将光标移入书签的位置
 
                 //填充数值
                 if (kvp.Value != null)
@@ -62,7 +62,7 @@ namespace Aspose.Words
                     }
                     else
                     {
-                        DocBuilder.Write(kvp.Value.ToString());
+                        WordDocBuilder.Write(kvp.Value.ToString());
                     }
                 }
             }

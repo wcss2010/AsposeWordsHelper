@@ -74,9 +74,9 @@ namespace WordTest
             //// Add field for total page numbers in document
             //doc.DocBuilder.InsertField("NUMPAGES", "");
 
-            doc.DocBuilder.MoveToBookmark("附件3");
-            doc.DocBuilder.InsertBreak(BreakType.SectionBreakNewPage);
-            doc.DocBuilder.PageSetup.Orientation = Aspose.Words.Orientation.Landscape;
+            doc.WordDocBuilder.MoveToBookmark("附件3");
+            doc.WordDocBuilder.InsertBreak(BreakType.SectionBreakNewPage);
+            doc.WordDocBuilder.PageSetup.Orientation = Aspose.Words.Orientation.Landscape;
                         
             //doc.DocBuilder.InsertHtml("<h1>1、分析数据</h1>");
             //doc.DocBuilder.InsertHtml("<h2>1.1 数据一</h2>");
@@ -89,42 +89,14 @@ namespace WordTest
             //Aspose.Words.Lists.List numberedList = doc.WordDoc.Lists.Add(Aspose.Words.Lists.ListTemplate.NumberDefault);
             //numberedList.ListLevels[1].NumberStyle = NumberStyle.Arabic;
             //numberedList.ListLevels[1].NumberFormat = "\x0000.\x0001";
-            
-            // Start a numbered list with default formatting.
-            doc.DocBuilder.ListFormat.ApplyNumberDefault();
-            doc.DocBuilder.Writeln("Opening documents from different formats:");
 
-            // Go to second list level, add more text.
-            doc.DocBuilder.ListFormat.ListIndent();
-            doc.DocBuilder.Writeln("DOC");
-            doc.DocBuilder.Writeln("PDF");
-            doc.DocBuilder.Writeln("HTML");
-
-            // Go to second list level, add more text.
-            doc.DocBuilder.ListFormat.ListIndent();
-            doc.DocBuilder.Writeln("DOC");
-            doc.DocBuilder.Writeln("PDF");
-            doc.DocBuilder.Writeln("HTML");
-
-            // Outdent to the first list level.
-            doc.DocBuilder.ListFormat.ListOutdent();
-            doc.DocBuilder.Writeln("Processing documents");
-            doc.DocBuilder.Writeln("Saving documents in different formats:");
-
-            // Indent the list level again.
-            doc.DocBuilder.ListFormat.ListIndent();
-            doc.DocBuilder.Writeln("DOC");
-            doc.DocBuilder.Writeln("PDF");
-            doc.DocBuilder.Writeln("HTML");
-            doc.DocBuilder.Writeln("MHTML");
-            doc.DocBuilder.Writeln("Plain text");
-
-            // Outdent the list level again.
-            doc.DocBuilder.ListFormat.ListOutdent();
-            doc.DocBuilder.Writeln("Doing many other things!");
-
-            // End the numbered list.
-            doc.DocBuilder.ListFormat.RemoveNumbers();
+            doc.WordDocBuilder.MoveToBookmark("项目分解详细");
+            Aspose.Words.Lists.List numberList = null;
+            NodeCollection nodes = doc.WordDoc.GetChildNodes(NodeType.Paragraph, true);
+            foreach (Node node in nodes)
+            {
+               
+            }
 
             doc.WordDoc.Save(Path_out); //保存word
 
