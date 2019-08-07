@@ -35,6 +35,15 @@ namespace Aspose.Words
         /// <summary>
         /// 构造函数
         /// </summary>
+        public WordDocument()
+        {
+            document = new Document();
+            documentBuilder = new DocumentBuilder(document);
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         /// <param name="docFile">Word文档</param>
         public WordDocument(string docFile)
         {
@@ -285,9 +294,7 @@ namespace Aspose.Words
 
                     //创建列
                     Aspose.Words.Tables.Cell cellObj = new Cell(table.Document);
-                    Aspose.Words.Paragraph p = new Paragraph(table.Document);
-                    p.AppendChild(new Run(table.Document, dr[k] != null ? dr[k].ToString() : string.Empty));
-                    cellObj.AppendChild(p);
+                    cellObj.AppendChild(newParagraph(table.Document, dr[k] != null ? dr[k].ToString() : string.Empty));
                     rowObj.Cells.Add(cellObj);
                 }
 
@@ -297,6 +304,26 @@ namespace Aspose.Words
                     table.Rows.Add(rowObj);
                 }
             }
+        }
+
+        /// <summary>
+        /// 创建文本Paragraph
+        /// </summary>
+        /// <param name="docs"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public Paragraph newParagraph(DocumentBase docs, string text)
+        {
+            Aspose.Words.Paragraph p = new Paragraph(docs);
+            if (string.IsNullOrEmpty(text))
+            {
+                //不进行操作
+            }
+            else
+            {
+                p.AppendChild(new Run(docs, text != null ? text : string.Empty));
+            }
+            return p;
         }
 
         /// <summary>
